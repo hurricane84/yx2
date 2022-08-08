@@ -15,7 +15,6 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-$color: #f00;
 @mixin wyy(){
     width: 200px;
     height: 200px;
@@ -24,7 +23,7 @@ $color: #f00;
     // width: 200px;
     // height: 200px;
     @include wyy();
-    background: $color;
+    background: $colorB;
     &-title{
         color: #fff;
     }
