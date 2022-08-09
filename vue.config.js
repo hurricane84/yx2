@@ -8,5 +8,16 @@ module.exports = defineConfig({
         prependData: '@import "@/assets/scss/base.scss";'
       }
     }
+  },
+  devServer: {
+    proxy: {
+      '/api': {
+        target: 'http://yanxuan.xiecheng.live:7001',
+        changeOrigin: true,
+        pathRewrite: {
+          '^/api': ''
+        }
+      }
+    }
   }
 })

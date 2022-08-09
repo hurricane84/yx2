@@ -20,7 +20,12 @@ export default {
       total: 0 // 当前商品总数
     }
   },
-  components: { NavFooter }
+  components: { NavFooter },
+  async created () {
+    const total = await this.$axios.get('/getTotalNums')
+    // console.log(res.data.data)
+    this.total = total
+  }
 }
 </script>
 
