@@ -5,6 +5,7 @@ import store from './store'
 import './assets/js/rem.js'
 import './assets/css/border.css'
 import './assets/css/reset.css'
+import './assets/iconfont/iconfont.css'
 
 Vue.config.productionTip = false
 
