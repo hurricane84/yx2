@@ -1,5 +1,6 @@
 <template>
   <div>
+    <!-- 头部 -->
     <div class="header">
       <div class="logo"></div>
       <div class="search">
@@ -8,19 +9,32 @@
       </div>
       <div class="login">登录</div>
     </div>
+    <!-- 轮播图 -->
+    <swiper height="3.7rem" :list="bannerList" class="swiper"/>
+    <!-- 底部导航菜单 -->
     <nav-footer />
   </div>
 </template>
 
 <script>
 import NavFooter from '@/components/NavFooter.vue'
+import Swiper from '@/components/Swiper.vue'
+
 export default {
   data () {
     return {
-      total: 0 // 当前商品总数
+      total: 0, // 当前商品总数
+      bannerList: [
+        'https://yanxuan.nosdn.127.net/e48cc1f908b359c891bb0152feb9e50e.jpg?type=webp&imageView&quality=75&thumbnail=750x0',
+        'https://yanxuan.nosdn.127.net/9f40ca5a83a06ded9587124432471b67.jpg?type=webp&imageView&quality=75&thumbnail=750x0',
+        'https://yanxuan.nosdn.127.net/7f762f223c3e320df8260c4b54879124.jpg?type=webp&imageView&quality=75&thumbnail=750x0',
+        'https://yanxuan.nosdn.127.net/ef739c5f6ba97afbf201ee9d9b3eb16d.jpg?type=webp&imageView&quality=75&thumbnail=750x0',
+        'https://yanxuan.nosdn.127.net/7d38ac617e6175f468140d326b7ebcda.jpg?type=webp&imageView&quality=75&thumbnail=750x0',
+        'https://yanxuan.nosdn.127.net/e52ad10cfd0f24691c987006ef82a814.jpg?type=webp&imageView&quality=75&thumbnail=750x0'
+      ]
     }
   },
-  components: { NavFooter },
+  components: { NavFooter, Swiper, Swiper },
   async created () {
     const total = await this.$axios.get('/getTotalNums')
     // console.log(res.data.data)
@@ -75,5 +89,8 @@ export default {
     border: 1px solid $colorB;
     border-radius: 0.08rem;
   }
+}
+.swiper{
+  margin-top: 0.88rem;
 }
 </style>
