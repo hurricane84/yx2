@@ -19,7 +19,8 @@ export default {
     return {
       slideStyle: { width: '15rem' },
       itemWidth: 750, // 单张图片的宽度
-      nowIndex: 0 // 当前选中的索引
+      nowIndex: 0, // 当前选中的索引
+      timer: null // 轮播图定时器
     }
   },
   props: {
@@ -53,10 +54,23 @@ export default {
         const length = this.list.length
         this.slideStyle.width = this.itemWidth * length + 'px'
       })
+    },
+    // 自动播放
+    autoMove () {
+      if (this.options.autoplay) {
+        this.timer = setInterval(() => {
+          this.nowIndex++
+          if (this.nowIndex > this.list.length - 1) {
+            this.nowIndex = 0 // 最后一张再回到第一张
+          }
+          this.slideStyle.transform = `translateX(-${this.itemWidth * this.nowIndex}px)`
+        }, this.options.interval)
+      }
     }
   },
   mounted () {
     this.calcWidth()
+    this.autoMove()
   }
 }
 </script>
