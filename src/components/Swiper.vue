@@ -71,6 +71,13 @@ export default {
   mounted () {
     this.calcWidth()
     this.autoMove()
+    window.addEventListener('reset', this.calcWidth)
+  },
+  destroyed () {
+    if (this.options.autoplay) {
+      clearInterval(this.timer)
+    }
+    window.removeEventListener('resize', this.calaWidth)
   }
 }
 </script>
