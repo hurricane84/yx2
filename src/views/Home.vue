@@ -10,7 +10,9 @@
       <div class="login">登录</div>
     </div>
     <!-- 轮播图 -->
-    <swiper height="3.7rem" :list="bannerList" class="swiper"/>
+    <swiper height="3.7rem" :list="bannerList" class="swiper" @onClick="swiperClick"/>
+    <!-- 首页信息 -->
+
     <!-- 底部导航菜单 -->
     <nav-footer />
   </div>
@@ -34,11 +36,19 @@ export default {
       ]
     }
   },
-  components: { NavFooter, Swiper, Swiper },
-  async created () {
-    const total = await this.$axios.get('/getTotalNums')
-    // console.log(res.data.data)
-    this.total = total
+  components: { NavFooter, Swiper },
+  methods: {
+    swiperClick (item) {
+      console.log(item)
+    },
+    async getTotalNums () {
+      const total = await this.$axios.get('/getTotalNums')
+      // console.log(res.data.data)
+      this.total = total
+    }
+  },
+  created () {
+    this.getTotalNums()
   }
 }
 </script>

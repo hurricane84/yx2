@@ -1,8 +1,8 @@
 <template>
-  <div class="swiper" :style="{height: height}">
+  <div class="swiper" :style="{height: height}" @touchstart="onTouchStart" @touchend="onTouchEnd">
     <!-- 图片内容 -->
     <ul class="swiper-slide" :style="slideStyle">
-        <li class="swiper-item" v-for="(item, index) in list" :key="index" :style="{width: itemWidth + 'px'}">
+        <li class="swiper-item" v-for="(item, index) in list" :key="index" :style="{width: itemWidth + 'px'}" @click="handleClick(item)">
             <img :src="item" alt="">
         </li>
     </ul>
@@ -20,7 +20,9 @@ export default {
       slideStyle: { width: '15rem' },
       itemWidth: 750, // 单张图片的宽度
       nowIndex: 0, // 当前选中的索引
-      timer: null // 轮播图定时器
+      timer: null, // 轮播图定时器
+      touchStart: {}, // 触摸开始位置
+      touchEnd: {} // 触摸结束位置
     }
   },
   props: {
@@ -45,6 +47,11 @@ export default {
       }
     }
   },
+  watch: {
+    list () {
+      this.calaWidth()
+    }
+  },
   methods: {
     // 计算slide宽度
     calcWidth () {
@@ -55,6 +62,9 @@ export default {
         this.slideStyle.width = this.itemWidth * length + 'px'
       })
     },
+    move () {
+      this.slideStyle.transform = `translateX(-${this.itemWidth * this.nowIndex}px)`
+    },
     // 自动播放
     autoMove () {
       if (this.options.autoplay) {
@@ -63,9 +73,35 @@ export default {
           if (this.nowIndex > this.list.length - 1) {
             this.nowIndex = 0 // 最后一张再回到第一张
           }
-          this.slideStyle.transform = `translateX(-${this.itemWidth * this.nowIndex}px)`
+          this.move()
         }, this.options.interval)
       }
+    },
+    onTouchStart (e) {
+      this.touchStart = e.changedTouches[0] // 开始触摸点信息
+      if (this.options.autoplay) {
+        clearInterval(this.timer)
+      }
+    },
+    onTouchEnd (e) {
+      this.touchEnd = e.changedTouches[0] // 结束触摸点信息
+      // 判断左滑还是右滑
+      if (this.touchEnd.clientX - this.touchStart.clientX > 30) {
+        this.nowIndex--
+        if (this.nowIndex < 0) {
+          this.nowIndex = this.list.length - 1
+        }
+      } else if (this.touchEnd.clientX - this.touchStart.clientX < -30) {
+        this.nowIndex++
+        if (this.nowIndex > this.list.length - 1) {
+          this.nowIndex = 0
+        }
+      }
+      this.move()
+      this.autoMove()
+    },
+    handleClick (item) {
+      this.$emit('onClick', item)
     }
   },
   mounted () {
