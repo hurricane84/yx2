@@ -12,7 +12,21 @@
     <!-- 轮播图 -->
     <swiper height="3.7rem" :list="bannerList" class="swiper" @onClick="swiperClick"/>
     <!-- 首页信息 -->
-
+    <!-- 服务信息 -->
+    <div class="service-policy" v-if="info && info.commonConfigModule && info.commonConfigModule.brandDescPicUrl">
+      <img :src="info.commonConfigModule.brandDescPicUrl" alt=""/>
+    </div>
+    <!-- 分类 -->
+    <ul class="kingkong" v-if="info && info.kingKongAreaV4">
+      <li class="kingkong-item" v-for="(item, index) in info.kingKongAreaV4.slice(0, 10)" :key="index">
+        <img :src="item.picUrls[0]" alt="">
+        <div class="title">{{item.title}}</div>
+      </li>
+    </ul>
+    <!-- banner -->
+    <div class="operation-cfg" v-if="info && info.operationRdcCfg && info.operationRdcCfg[0].singleBanner && info.operationRdcCfg[0].singleBanner.banners[0] && info.operationRdcCfg[0].singleBanner.banners[0].picUrl">
+          <img :src="info.operationRdcCfg[0].singleBanner.banners[0].picUrl" alt />
+    </div>
     <!-- 底部导航菜单 -->
     <nav-footer />
   </div>
@@ -27,13 +41,14 @@ export default {
     return {
       total: 0, // 当前商品总数
       bannerList: [
-        'https://yanxuan.nosdn.127.net/e48cc1f908b359c891bb0152feb9e50e.jpg?type=webp&imageView&quality=75&thumbnail=750x0',
-        'https://yanxuan.nosdn.127.net/9f40ca5a83a06ded9587124432471b67.jpg?type=webp&imageView&quality=75&thumbnail=750x0',
-        'https://yanxuan.nosdn.127.net/7f762f223c3e320df8260c4b54879124.jpg?type=webp&imageView&quality=75&thumbnail=750x0',
-        'https://yanxuan.nosdn.127.net/ef739c5f6ba97afbf201ee9d9b3eb16d.jpg?type=webp&imageView&quality=75&thumbnail=750x0',
-        'https://yanxuan.nosdn.127.net/7d38ac617e6175f468140d326b7ebcda.jpg?type=webp&imageView&quality=75&thumbnail=750x0',
-        'https://yanxuan.nosdn.127.net/e52ad10cfd0f24691c987006ef82a814.jpg?type=webp&imageView&quality=75&thumbnail=750x0'
-      ]
+        // 'https://yanxuan.nosdn.127.net/e48cc1f908b359c891bb0152feb9e50e.jpg?type=webp&imageView&quality=75&thumbnail=750x0',
+        // 'https://yanxuan.nosdn.127.net/9f40ca5a83a06ded9587124432471b67.jpg?type=webp&imageView&quality=75&thumbnail=750x0',
+        // 'https://yanxuan.nosdn.127.net/7f762f223c3e320df8260c4b54879124.jpg?type=webp&imageView&quality=75&thumbnail=750x0',
+        // 'https://yanxuan.nosdn.127.net/ef739c5f6ba97afbf201ee9d9b3eb16d.jpg?type=webp&imageView&quality=75&thumbnail=750x0',
+        // 'https://yanxuan.nosdn.127.net/7d38ac617e6175f468140d326b7ebcda.jpg?type=webp&imageView&quality=75&thumbnail=750x0',
+        // 'https://yanxuan.nosdn.127.net/e52ad10cfd0f24691c987006ef82a814.jpg?type=webp&imageView&quality=75&thumbnail=750x0'
+      ],
+      info: {} // 首页信息
     }
   },
   components: { NavFooter, Swiper },
@@ -45,10 +60,17 @@ export default {
       const total = await this.$axios.get('/getTotalNums')
       // console.log(res.data.data)
       this.total = total
+    },
+    async getHomeinfo () {
+      const res = await this.$axios.get('/home')
+      console.log(res)
+      this.info = res
+      this.bannerList = res.focus.map(item => item.img)
     }
   },
   created () {
     this.getTotalNums()
+    this.getHomeinfo()
   }
 }
 </script>
@@ -102,5 +124,24 @@ export default {
 }
 .swiper{
   margin-top: 0.88rem;
+}
+.kingkong{
+  display: flex;
+  justify-content: space-around;
+  flex-wrap: wrap;
+  &-item{
+    width: 1.1rem;
+    height: 1.56rem;
+    margin: 0.1rem 0.2rem;
+    text-align: center;
+    img{
+      width: 100%;
+    }
+    .title{
+      color: $colorC;
+      font-size: $fontA;
+      white-space: nowrap;
+    }
+  }
 }
 </style>

@@ -49,7 +49,7 @@ export default {
   },
   watch: {
     list () {
-      this.calaWidth()
+      this.calcWidth()
     }
   },
   methods: {
@@ -113,7 +113,7 @@ export default {
     if (this.options.autoplay) {
       clearInterval(this.timer)
     }
-    window.removeEventListener('resize', this.calaWidth)
+    window.removeEventListener('resize', this.calcWidth)
   }
 }
 </script>
